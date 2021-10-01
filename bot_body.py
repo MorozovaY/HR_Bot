@@ -1,6 +1,6 @@
 import logging
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
-from handlers import (greet_user, regist, company, offices, contacts_inline_keyboard, contacts)
+from handlers import greet_user, regist, company, offices, contacts_inline_keyboard, contacts
 
 import settings
 
