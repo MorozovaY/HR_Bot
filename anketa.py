@@ -3,17 +3,19 @@ from telegram.ext import  ConversationHandler
 from handlers import main_keyboard
 
 def anketa_start(update, context):
+    context.user_data['anketa'] = dict()
     update.message.reply_text(
         'Вы перешли в раздел регистрация.'
         'Пожалуйста введите как Вас зовут через пробел в формате: ФАМИЛИЯ ИМЯ ОТЧЕСТВО',
         reply_markup=ReplyKeyboardRemove()
     )
+    
     return 'name'
 
 def anketa_name(update, context):
     user_name = update.message.text
     if len(user_name.split()) < 3:
-        update.message.reply_text('Пожалуйста введите имя, фамилию и отчество')
+        update.message.reply_text('Пожалуйста введите фамилию, имя и отчество')
         return 'name'
     else:
         context.user_data['anketa']['name'] = update.message.text
@@ -30,7 +32,7 @@ def anketa_city(update, context):
 def anketa_phone(update, context):
     context.user_data['anketa']['phone'] = update.message.text
     update.message.reply_text(
-        'Вы можете прикрепить Ваше резюме файлом в формате .pdf'
+        'Вы можете прикрепить Ваше резюме файлом в формате .pdf '
         'Либо можете пропустить этот этап нажав /skip'
     )
     return 'cv'
