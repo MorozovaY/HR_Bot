@@ -2,6 +2,9 @@ from telegram import ReplyKeyboardRemove
 from telegram.ext import  ConversationHandler
 from handlers import main_keyboard
 
+from db import db_session
+from db import User
+
 def anketa_start(update, context):
     context.user_data['anketa'] = dict()
     update.message.reply_text(
@@ -9,7 +12,6 @@ def anketa_start(update, context):
         'Пожалуйста, введите, как Вас зовут через пробел в формате: ФАМИЛИЯ ИМЯ ОТЧЕСТВО',
         reply_markup=ReplyKeyboardRemove()
     )
-    
     return 'name'
 
 
@@ -47,6 +49,16 @@ def anketa_cv(update, context):
         'Регистрация завершена.',
         reply_markup=main_keyboard()
     )
+    anketa_data = context.user_data.get('anketa', 'None')
+    name = anketa_data['name']
+    city = anketa_data['city']
+    phone  = anketa_data['phone']
+    cv = anketa_data['cv']
+    bot_user = User(name=name, city=city, phone=phone, cv=cv)
+
+    db_session.add(bot_user)
+    db_session.commit()
+
     return ConversationHandler.END
 
 

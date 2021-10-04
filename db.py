@@ -3,7 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy import Column, Integer, String, Text
 
-engine = create_engine('sqlite:///mydb.db')
+engine = create_engine('sqlite:///C:\\projects\\HR_Bot\\mydb.db')
 db_session = scoped_session(sessionmaker(bind=engine))
 
 Base = declarative_base()
@@ -16,10 +16,10 @@ class User(Base):
     city = Column(String)
     phone = Column(Integer(), unique=True)
     cv = Column(Text)
-    access = Column(String)
-
+    
     def __repr__(self):
         return f'<User {self.name} {self.email}>'
 
 if __name__ == "__main__":
     Base.metadata.create_all(bind=engine)
+    
