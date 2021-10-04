@@ -1,9 +1,8 @@
 import logging
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler, ConversationHandler
-from handlers import greet_user, regist, company, offices, contacts_inline_keyboard, contacts
+from handlers import greet_user, company, offices, contacts_inline_keyboard, contacts
 from anketa import anketa_start, anketa_name, anketa_city, anketa_phone, anketa_cv, anketa_dontknow
-
 
 import settings
 
@@ -31,6 +30,7 @@ def main():
             MessageHandler(Filters.text | Filters.photo | Filters.video | Filters.document | Filters.location, anketa_dontknow)
         ]
     )
+    
     dp.add_handler(anketa)
     dp.add_handler(CommandHandler('start', greet_user))
     dp.add_handler(CallbackQueryHandler(contacts_inline_keyboard))

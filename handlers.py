@@ -10,6 +10,7 @@ def greet_user(update, context):
         reply_markup=main_keyboard()
     )
 
+
 def main_keyboard():
     return ReplyKeyboardMarkup(
         [
@@ -26,11 +27,13 @@ def company(update, context):
         reply_markup=main_keyboard()
     )
 
+
 def offices(update, context):
     update.message.reply_text(
         'Здесь будет информация про офисы и филиалы',
         reply_markup=main_keyboard()
     )
+
 
 def contacts_inline_keyboard():
     inlinekeyboard = [
@@ -41,8 +44,10 @@ def contacts_inline_keyboard():
     ]
     return InlineKeyboardMarkup(inlinekeyboard)
 
+
 def contacts(update, context):
     update.message.reply_text(
         'Наши основные соцсети и контакты:',
         reply_markup=contacts_inline_keyboard()
     )
+    
