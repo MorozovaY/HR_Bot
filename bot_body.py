@@ -1,10 +1,9 @@
 import logging
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler, ConversationHandler
-
-from handlers import greet_user, company, offices, contacts_inline_keyboard, contacts
-
+from handlers import greet_user, regist, company, offices, contacts_inline_keyboard, contacts
 from anketa import anketa_start, anketa_name, anketa_city, anketa_phone, anketa_cv, anketa_dontknow
+
 
 import settings
 
