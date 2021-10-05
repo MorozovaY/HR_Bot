@@ -49,15 +49,17 @@ def anketa_cv(update, context):
         'Регистрация завершена.',
         reply_markup=main_keyboard()
     )
-    anketa_data = context.user_data.get('anketa', 'None')
-    name = anketa_data['name']
-    city = anketa_data['city']
-    phone  = anketa_data['phone']
-    cv = anketa_data['cv']
-    bot_user = User(name=name, city=city, phone=phone, cv=cv)
+    anketa_data = context.user_data.get('anketa')
+    if anketa_data == None:
+       return ConversationHandler.END 
 
-    db_session.add(bot_user)
-    db_session.commit()
+    bot_user = User(name=anketa_data.get('name'), city=anketa_data.get('city'), phone=anketa_data.get('phone'), cv=anketa_data.get('cv'))
+
+    try:
+        db_session.add(bot_user)
+        db_session.commit()
+    except:
+        update.message.reply_text('Что-то пошло не так, попробуйте снова.')
 
     return ConversationHandler.END
 

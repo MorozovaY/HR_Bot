@@ -3,7 +3,9 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy import Column, Integer, String, Text
 
-engine = create_engine('sqlite:///C:\\projects\\HR_Bot\\mydb.db')
+import settings
+
+engine = create_engine(settings.DB_PATH)
 db_session = scoped_session(sessionmaker(bind=engine))
 
 Base = declarative_base()
