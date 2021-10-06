@@ -1,6 +1,10 @@
 from telegram import ReplyKeyboardRemove
 from telegram.ext import  ConversationHandler
 from handlers import main_keyboard
+from sqlalchemy.exc import IntegrityError
+
+from db import db_session
+from db import User
 
 def anketa_start(update, context):
     context.user_data['anketa'] = dict()
@@ -9,7 +13,6 @@ def anketa_start(update, context):
         'Пожалуйста, введите, как Вас зовут через пробел в формате: ФАМИЛИЯ ИМЯ ОТЧЕСТВО',
         reply_markup=ReplyKeyboardRemove()
     )
-    
     return 'name'
 
 
@@ -47,6 +50,20 @@ def anketa_cv(update, context):
         'Регистрация завершена.',
         reply_markup=main_keyboard()
     )
+    anketa_data = context.user_data.get('anketa')
+    if anketa_data is None:
+        update.message.reply_text('Не удалось сохранить анкету.')
+        return ConversationHandler.END
+
+    bot_user = User(name=anketa_data.get('name'), city=anketa_data.get('city'), phone=anketa_data.get('phone'), cv=anketa_data.get('cv'))
+
+    try:
+        db_session.add(bot_user)
+        db_session.commit()
+    except IntegrityError:
+        update.message.reply_text('Что-то пошло не так, попробуйте снова.')
+        db_session.rollback()
+
     return ConversationHandler.END
 
 
