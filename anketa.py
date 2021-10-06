@@ -1,7 +1,7 @@
 from telegram import ReplyKeyboardRemove
 from telegram.ext import  ConversationHandler
 from handlers import main_keyboard
-from sqlalchemy import IntegrityError
+from sqlalchemy.exc import IntegrityError
 
 from db import db_session
 from db import User
