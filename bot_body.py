@@ -1,9 +1,10 @@
 import logging
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler, ConversationHandler
-from handlers import greet_user, enter, company, offices, contacts_inline_keyboard, contacts
+from handlers import greet_user, enter_candidate, company, offices, contacts_inline_keyboard, contacts
 from anketa import anketa_start, anketa_name, anketa_city, anketa_phone, anketa_cv, anketa_dontknow
-from external_keyboard import career, news, company1, offices1, back
+from external_keyboard import career, news, company_external, offices_external, back
+from candidate_keyboard import dresscode, corplife, employment, adaptation
 
 import settings
 
@@ -35,15 +36,19 @@ def main():
     dp.add_handler(anketa)
     dp.add_handler(CommandHandler('start', greet_user))
     dp.add_handler(CallbackQueryHandler(contacts_inline_keyboard))
-    dp.add_handler(MessageHandler(Filters.regex('^(Войти по ключу)$'), enter))
+    dp.add_handler(MessageHandler(Filters.regex('^(Войти по ключу кандидата)$'), enter_candidate))
     dp.add_handler(MessageHandler(Filters.regex('^(О компании)$'), company))
-    dp.add_handler(MessageHandler(Filters.regex('^(Про компанию)$'), company1))
+    dp.add_handler(MessageHandler(Filters.regex('^(Про компанию)$'), company_external))
     dp.add_handler(MessageHandler(Filters.regex('^(Офисы)$'), offices))
-    dp.add_handler(MessageHandler(Filters.regex('^(Наши офисы)$'), offices1))
+    dp.add_handler(MessageHandler(Filters.regex('^(Наши офисы)$'), offices_external))
     dp.add_handler(MessageHandler(Filters.regex('^(Соцсети и контакты)$'), contacts))
     dp.add_handler(MessageHandler(Filters.regex('^(Карьера в компании)$'), career))
     dp.add_handler(MessageHandler(Filters.regex('^(Подписаться на новости)$'), news))
     dp.add_handler(MessageHandler(Filters.regex('^(Вернуться в главное меню)$'), back))
+    dp.add_handler(MessageHandler(Filters.regex('^(Дресс-код)$'), dresscode))
+    dp.add_handler(MessageHandler(Filters.regex('^(Корпоративная жизнь)$'), corplife))
+    dp.add_handler(MessageHandler(Filters.regex('^(Трудоустройство)$'), employment))
+    dp.add_handler(MessageHandler(Filters.regex('^(Адаптация)$'), adaptation))
 
 
     logging.info('Бот стартовал')
