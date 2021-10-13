@@ -1,8 +1,9 @@
 import logging
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler, ConversationHandler
-from handlers import greet_user, company, offices, contacts_inline_keyboard, contacts
+from handlers import greet_user, enter, company, offices, contacts_inline_keyboard, contacts
 from anketa import anketa_start, anketa_name, anketa_city, anketa_phone, anketa_cv, anketa_dontknow
+from external_keyboard import career, news, company1, offices1, back
 
 import settings
 
@@ -34,9 +35,15 @@ def main():
     dp.add_handler(anketa)
     dp.add_handler(CommandHandler('start', greet_user))
     dp.add_handler(CallbackQueryHandler(contacts_inline_keyboard))
+    dp.add_handler(MessageHandler(Filters.regex('^(Войти по ключу)$'), enter))
     dp.add_handler(MessageHandler(Filters.regex('^(О компании)$'), company))
+    dp.add_handler(MessageHandler(Filters.regex('^(Про компанию)$'), company1))
     dp.add_handler(MessageHandler(Filters.regex('^(Офисы)$'), offices))
+    dp.add_handler(MessageHandler(Filters.regex('^(Наши офисы)$'), offices1))
     dp.add_handler(MessageHandler(Filters.regex('^(Соцсети и контакты)$'), contacts))
+    dp.add_handler(MessageHandler(Filters.regex('^(Карьера в компании)$'), career))
+    dp.add_handler(MessageHandler(Filters.regex('^(Подписаться на новости)$'), news))
+    dp.add_handler(MessageHandler(Filters.regex('^(Вернуться в главное меню)$'), back))
 
 
     logging.info('Бот стартовал')
@@ -44,4 +51,4 @@ def main():
     mybot.idle()
 
 if __name__ == '__main__':
-    main()     
+    main()
