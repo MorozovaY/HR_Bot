@@ -14,11 +14,18 @@ def greet_user(update, context):
 def main_keyboard():
     return ReplyKeyboardMarkup(
         [
-            ['Регистрация'],
+            ['Регистрация', 'Войти по ключу'],
             ['О компании'],
             ['Офисы'],
             ['Соцсети и контакты']
         ])
+
+
+def enter(update, context):
+    update.message.reply_text(
+        'Эта кнопка будет как-то запрашивать ключ',
+        reply_markup=main_keyboard()
+    )
 
 
 def company(update, context):
@@ -50,4 +57,3 @@ def contacts(update, context):
         'Наши основные соцсети и контакты:',
         reply_markup=contacts_inline_keyboard()
     )
-    

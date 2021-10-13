@@ -1,6 +1,7 @@
 from telegram import ReplyKeyboardRemove
 from telegram.ext import  ConversationHandler
 from handlers import main_keyboard
+from external_keyboard import external_keyboard
 from sqlalchemy.exc import IntegrityError
 
 from db import db_session
@@ -46,10 +47,6 @@ def anketa_phone(update, context):
 
 def anketa_cv(update, context):
     context.user_data['anketa']['cv'] = update.message.text
-    update.message.reply_text(
-        'Регистрация завершена.',
-        reply_markup=main_keyboard()
-    )
     anketa_data = context.user_data.get('anketa')
     if anketa_data is None:
         update.message.reply_text('Не удалось сохранить анкету.')
@@ -60,10 +57,17 @@ def anketa_cv(update, context):
     try:
         db_session.add(bot_user)
         db_session.commit()
+        context.bot.sendPhoto(chat_id=update.effective_chat.id,
+        photo='https://media.kingston.com/kingston/hero/ktc-hero-solutions-data-security-who-is-responsible-for-cyber-security-lg.jpg',
+        caption='Регистрация успешно завершена! Ниже представлено меню бота для Вас.',
+        reply_markup=external_keyboard()
+    )
     except IntegrityError:
-        update.message.reply_text('Что-то пошло не так, попробуйте снова.')
+        update.message.reply_text('Что-то пошло не так, попробуйте снова.',
+            reply_markup=main_keyboard()
+        )
         db_session.rollback()
-
+            
     return ConversationHandler.END
 
 
