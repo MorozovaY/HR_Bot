@@ -10,14 +10,14 @@ def external_keyboard():
         ])
 
 
-def company1(update, context):
+def company_external(update, context):
     update.message.reply_text(
         'Здесь будет более расширенная информация о компании',
         reply_markup=external_keyboard()
     )
 
 
-def offices1(update, context):
+def offices_external(update, context):
     update.message.reply_text(
         'Здесь будет более расширенная информация про офисы и филиалы',
         reply_markup=external_keyboard()
