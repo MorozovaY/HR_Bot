@@ -1,10 +1,11 @@
 import logging
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler, ConversationHandler
-from handlers import greet_user, enter_candidate, company, offices, contacts_inline_keyboard, contacts
+from handlers import greet_user, enter_candidate, enter_employee, company, offices, contacts_inline_keyboard, contacts
 from anketa import anketa_start, anketa_name, anketa_city, anketa_phone, anketa_cv, anketa_dontknow
 from external_keyboard import career, news, company_external, offices_external, back
 from candidate_keyboard import dresscode, corplife, employment, adaptation
+from employee_keyboard import questions, learning, development, referral, inline_buttons
 
 import settings
 
@@ -35,8 +36,9 @@ def main():
     
     dp.add_handler(anketa)
     dp.add_handler(CommandHandler('start', greet_user))
-    dp.add_handler(CallbackQueryHandler(contacts_inline_keyboard))
+    dp.add_handler(CallbackQueryHandler(inline_buttons))
     dp.add_handler(MessageHandler(Filters.regex('^(Войти по ключу кандидата)$'), enter_candidate))
+    dp.add_handler(MessageHandler(Filters.regex('^(Войти по ключу сотрудника)$'), enter_employee))
     dp.add_handler(MessageHandler(Filters.regex('^(О компании)$'), company))
     dp.add_handler(MessageHandler(Filters.regex('^(Про компанию)$'), company_external))
     dp.add_handler(MessageHandler(Filters.regex('^(Офисы)$'), offices))
@@ -49,6 +51,10 @@ def main():
     dp.add_handler(MessageHandler(Filters.regex('^(Корпоративная жизнь)$'), corplife))
     dp.add_handler(MessageHandler(Filters.regex('^(Трудоустройство)$'), employment))
     dp.add_handler(MessageHandler(Filters.regex('^(Адаптация)$'), adaptation))
+    dp.add_handler(MessageHandler(Filters.regex('^(Вопросы в HR)$'), questions))
+    dp.add_handler(MessageHandler(Filters.regex('^(Обучение)$'), learning))
+    dp.add_handler(MessageHandler(Filters.regex('^(План развития)$'), development))
+    dp.add_handler(MessageHandler(Filters.regex('^(Реферральная программа)$'), referral))
 
 
     logging.info('Бот стартовал')
