@@ -1,6 +1,7 @@
 from telegram import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardButton, InlineKeyboardMarkup
 from candidate_keyboard import candidate_keyboard
 from employee_keyboard import employee_keyboard
+from hr_keyboard import hr_keyboard
 
 def greet_user(update, context):
     print('Вызван /start')
@@ -19,6 +20,7 @@ def main_keyboard():
             ['Регистрация'],
             ['Войти по ключу кандидата'],
             ['Войти по ключу сотрудника'],
+            ['Войти по ключу HR'],
             ['О компании', 'Офисы', 'Соцсети и контакты']
         ])
 
@@ -36,6 +38,14 @@ def enter_employee(update, context):
     photo='https://www.assmont.com/wp-content/uploads/2020/04/1Karriere2.jpg',
     caption='Welcome on board! Ниже представлено меню бота для Вас.',
     reply_markup=employee_keyboard()
+)
+
+
+def enter_hr(update, context):
+    context.bot.sendPhoto(chat_id=update.effective_chat.id,
+    photo='https://www.hrsolutions-uk.com/wp-content/uploads/2016/11/Computer-hacker-stealing-data-from-a-laptop-000082920687_Full-scaled.jpg',
+    caption='Ниже представлено меню бота для HR.',
+    reply_markup=hr_keyboard()
 )
 
 
