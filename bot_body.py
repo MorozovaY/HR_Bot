@@ -1,8 +1,9 @@
 import logging
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler, ConversationHandler
+
 from handlers import greet_user, enter_candidate, enter_employee, enter_hr, company, offices, contacts
-from anketa import anketa_start, anketa_name, anketa_city, anketa_phone, anketa_cv, anketa_dontknow
+from anketa import anketa_start, anketa_name, anketa_city, anketa_phone, anketa_cv, anketa_cv_skip, anketa_dontknow
 from external_keyboard import career, news, company_external, offices_external, back
 from candidate_keyboard import dresscode, corplife, employment, adaptation
 from employee_keyboard import questions, learning, development, referral, inline_buttons
@@ -28,7 +29,10 @@ def main():
             'name': [MessageHandler(Filters.text, anketa_name)],
             'city': [MessageHandler(Filters.text, anketa_city)],
             'phone': [MessageHandler(Filters.text, anketa_phone)],
-            'cv' : [MessageHandler(Filters.text, anketa_cv)]
+            'cv' : [
+                CommandHandler("skip", anketa_cv_skip),
+                MessageHandler(Filters.document, anketa_cv)
+            ]
         },
         fallbacks=[
             MessageHandler(Filters.text | Filters.photo | Filters.video | Filters.document | Filters.location, anketa_dontknow)
