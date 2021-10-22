@@ -29,13 +29,8 @@ def show_user(update, context):
     table.align['Город'] = 'r'
     table.align['Телефон'] = 'r'
 
-    data = []
     for row in db_session.query(User):
-        rowdata = (row.name, row.city, row.phone)
-        data.append(rowdata)
-        
-    for name, city, phone in data:
-	    table.add_row([name,city,phone])
+        table.add_row([row.name, row.city, row.phone])
     update.message.reply_text(f'<pre>{table}</pre>', parse_mode=ParseMode.HTML, reply_markup=hr_keyboard())
 
 
