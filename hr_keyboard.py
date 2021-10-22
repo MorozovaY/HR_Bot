@@ -1,4 +1,11 @@
-from telegram import ReplyKeyboardMarkup
+from sqlalchemy.sql.expression import table
+from telegram import ReplyKeyboardMarkup, ParseMode
+
+import prettytable as pt
+import os
+
+from db import db_session
+from db import User
 
 def hr_keyboard():
     return ReplyKeyboardMarkup(
@@ -10,17 +17,21 @@ def hr_keyboard():
 
 
 def show_cv(update, context):
-    update.message.reply_text(
-        'При нажатии кнопки HR может просматривать прикрепленные резюме',
-        reply_markup=hr_keyboard()
-    )
+    files = os.listdir('downloads')
+    for fl in files:
+	    update.message.reply_document(document=open('downloads/'+fl,'rb'))
+    update.message.reply_text('', reply_markup=hr_keyboard())
 
 
 def show_user(update, context):
-    update.message.reply_text(
-        'При нажатии кнопки HR может просматривать зарегистрированных пользователей, кандидатов и сотрудников',
-        reply_markup=hr_keyboard()
-    )
+    table = pt.PrettyTable(['Имя', 'Город', 'Телефон'])
+    table.align['Имя'] = 'l'
+    table.align['Город'] = 'r'
+    table.align['Телефон'] = 'r'
+
+    for row in db_session.query(User):
+        table.add_row([row.name, row.city, row.phone])
+    update.message.reply_text(f'<pre>{table}</pre>', parse_mode=ParseMode.HTML, reply_markup=hr_keyboard())
 
 
 def candidate_key(update, context):
