@@ -13,7 +13,7 @@ def anketa_start(update, context):
     context.user_data['anketa'] = dict()
     update.message.reply_text(
         'Вы перешли в раздел регистрация.'
-        'Пожалуйста, введите, как Вас зовут через пробел в формате: ФАМИЛИЯ ИМЯ ОТЧЕСТВО',
+        'Пожалуйста, введите, как Вас зовут через пробел в формате: ФАМИЛИЯ ИМЯ ОТЧЕСТВО.',
         reply_markup=ReplyKeyboardRemove()
     )
     return 'name'
@@ -22,12 +22,12 @@ def anketa_start(update, context):
 def anketa_name(update, context):
     user_name = update.message.text
     if len(user_name.split()) < 3:
-        update.message.reply_text('Пожалуйста, введите фамилию, имя и отчество')
+        update.message.reply_text('Пожалуйста, введите фамилию, имя и отчество.')
         return 'name'
     else:
         context.user_data['anketa']['name'] = update.message.text
         update.message.reply_text(
-            'Введите город проживания'
+            'Введите город проживания.'
         )
         return 'city'
 
@@ -125,4 +125,4 @@ def anketa_cv_skip(update, context):
 
 
 def anketa_dontknow(update, context):
-    update.message.reply_text('Я Вас не понимаю')
+    update.message.reply_text('Я Вас не понимаю.')

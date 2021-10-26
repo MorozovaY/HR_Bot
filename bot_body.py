@@ -7,7 +7,8 @@ from anketa import anketa_start, anketa_name, anketa_city, anketa_phone, anketa_
 from external_keyboard import career, news, company_external, offices_external, back
 from candidate_keyboard import dresscode, corplife, employment, adaptation
 from employee_keyboard import questions, learning, development, referral, inline_buttons
-from hr_keyboard import show_cv, show_user, candidate_key, employee_key
+from hr_keyboard import show_cv, show_user
+from hr_dialog import add_user
 
 import settings
 
@@ -63,9 +64,8 @@ def main():
     dp.add_handler(MessageHandler(Filters.regex('^(Реферральная программа)$'), referral))
     dp.add_handler(MessageHandler(Filters.regex('^(Просмотр резюме)$'), show_cv))
     dp.add_handler(MessageHandler(Filters.regex('^(Просмотр пользователей)$'), show_user))
-    dp.add_handler(MessageHandler(Filters.regex('^(Создать ключ кандидата)$'), candidate_key))
-    dp.add_handler(MessageHandler(Filters.regex('^(Создать ключ сотрудника)$'), employee_key))
-
+    dp.add_handler(add_user)
+    
 
     logging.info('Бот стартовал')
     mybot.start_polling()
