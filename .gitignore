@@ -9,7 +9,6 @@ settings.py
 .idea/
 env/
 .DS_Store
-migrations/
 alembic.ini
 
 # C extensions

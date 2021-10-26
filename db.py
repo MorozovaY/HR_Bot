@@ -33,9 +33,6 @@ class Role(Base):
 	def __repr__(self):
 		return f"<role {self.role}>"
 
-#Чтобы добавить колонку в любую таблицу, теперь можно добавить колонку и данные команды в консоли:
-#alembic revision --autogenerate -m "comment"
-#alembic upgrade head
 
 if __name__ == "__main__":
     Base.metadata.create_all(bind=engine)
