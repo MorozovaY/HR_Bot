@@ -9,7 +9,6 @@ settings.py
 .idea/
 env/
 .DS_Store
-alembic.ini
 
 # C extensions
 *.so
