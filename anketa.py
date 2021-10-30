@@ -1,10 +1,12 @@
 from telegram import ReplyKeyboardRemove
 from telegram.ext import  ConversationHandler
+from key_handler import send_key
 from handlers import main_keyboard
 from external_keyboard import external_keyboard
 from sqlalchemy.exc import IntegrityError
 import re
 import os
+from other import external_photo
 
 from db import db_session
 from db import User
@@ -74,20 +76,26 @@ def anketa_cv(update, context):
         cv_file = context.bot.getFile(update.message.document.file_id)
         filename = os.path.join('downloads', f'{cv_file.file_id}.pdf')
         cv_file.download(filename)
+        context.user_data['anketa']['role'] = 'external'
         update.message.reply_text(
             'Регистрация успешно завершена.',
-            reply_markup=main_keyboard()
+            send_key(update, context),
         )
-        return ConversationHandler.END    
-    
+        return ConversationHandler.END
+   
 
-    bot_user = User(name=anketa_data.get('name'), city=anketa_data.get('city'), phone=anketa_data.get('phone'), cv=anketa_data.get('cv'))
+    bot_user = User(
+        name=anketa_data.get('name'), 
+        city=anketa_data.get('city'), 
+        phone=anketa_data.get('phone'), 
+        cv=anketa_data.get('cv')
+    )
 
     try:
         db_session.add(bot_user)
         db_session.commit()
         context.bot.sendPhoto(chat_id=update.effective_chat.id,
-        photo='https://media.kingston.com/kingston/hero/ktc-hero-solutions-data-security-who-is-responsible-for-cyber-security-lg.jpg',
+        photo=external_photo,
         caption='Регистрация успешно завершена! Ниже представлено меню бота для Вас.',
         reply_markup=external_keyboard()
     )
@@ -101,14 +109,20 @@ def anketa_cv(update, context):
 
 
 def anketa_cv_skip(update, context):
+    context.user_data['anketa']['role'] = 'external'
     anketa_data = context.user_data.get('anketa')
-    bot_user = User(name=anketa_data.get('name'), city=anketa_data.get('city'), phone=anketa_data.get('phone'), cv=anketa_data.get('cv'))
+    bot_user = User(
+        name=anketa_data.get('name'), 
+        city=anketa_data.get('city'), 
+        phone=anketa_data.get('phone'), 
+        cv=anketa_data.get('cv')
+    )
 
     try:
         db_session.add(bot_user)
         db_session.commit()
         context.bot.sendPhoto(chat_id=update.effective_chat.id,
-        photo='https://media.kingston.com/kingston/hero/ktc-hero-solutions-data-security-who-is-responsible-for-cyber-security-lg.jpg',
+        photo=external_photo,
         caption='Регистрация успешно завершена! Ниже представлено меню бота для Вас.',
         reply_markup=external_keyboard()
     )
@@ -119,7 +133,9 @@ def anketa_cv_skip(update, context):
         db_session.rollback()
     update.message.reply_text(
         'Регистрация завершена без сохранения резюме.',
+        send_key(update, context),
         reply_markup=main_keyboard()
+        
     )
     return ConversationHandler.END
 

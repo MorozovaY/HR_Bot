@@ -6,13 +6,6 @@ import re
 from db import db_session, User, Role
 from hr_keyboard import hr_keyboard
 from sqlalchemy.exc import IntegrityError
-import hashlib
-
-from hr_keyboard import hr_keyboard
-
-def generate_key(phone,role):
-    st = phone+str(role)
-    return hashlib.sha1(st.encode('utf-8')).hexdigest()
 
 
 def add_user_start(update, context):
@@ -64,7 +57,8 @@ def add_user_role(update, context):
     try:
         db_session.add(bot_user)
         db_session.commit()
-        update.message.reply_text('Создание пользователя завершено. Ключ: '+generate_key(user.get('phone'), user.get('role')),reply_markup=hr_keyboard())
+        update.message.reply_text('Создание пользователя завершено. ',
+        generareply_markup=hr_keyboard())
     
     except IntegrityError:
         update.message.reply_text('Ошибка. Такой номер телефона уже зарегестрирован.',
