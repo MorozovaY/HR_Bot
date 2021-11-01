@@ -77,12 +77,6 @@ def anketa_cv(update, context):
         filename = os.path.join('downloads', f'{cv_file.file_id}.pdf')
         cv_file.download(filename)
         context.user_data['anketa']['role'] = 'external'
-        update.message.reply_text(
-            'Регистрация успешно завершена.',
-            send_key(update, context),
-        )
-        return ConversationHandler.END
-   
 
     bot_user = User(
         name=anketa_data.get('name'), 
@@ -134,7 +128,7 @@ def anketa_cv_skip(update, context):
     update.message.reply_text(
         'Регистрация завершена без сохранения резюме.',
         send_key(update, context),
-        reply_markup=main_keyboard()
+        reply_markup=external_keyboard()
         
     )
     return ConversationHandler.END

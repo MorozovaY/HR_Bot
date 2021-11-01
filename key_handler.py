@@ -13,7 +13,8 @@ def send_key(update, context):
     cipher = Fernet(CYPHER_KEY)
     combined_data = phone + '.' + role
     byte_text = str.encode(combined_data)
-    encrypted_key = cipher.encrypt(byte_text) # это  ключ доступа
+    encrypted_bytekey = cipher.encrypt(byte_text) 
+    encrypted_key = encrypted_bytekey.decode()  # это  ключ доступа
     update.message.reply_text(
         'Следующим сообщением вам будет выслан ключ для доступа к дополнительным функциям бота. '
         'Чтобы использовать ключ, скопируйте его, нажмите кнопку "Войти по ключу", вставьте его в сообщение и отправьте боту'
@@ -25,7 +26,8 @@ def receive_key(update, context):
     update.message.reply_text('Введите ключ доступа')
     user_key = update.message.text
     cipher = Fernet(CYPHER_KEY)
-    decrypted_key = cipher.decrypt(user_key)
+    user_bytekey = str.encode(user_key)
+    decrypted_key = cipher.decrypt(user_bytekey)
     combined_data = decrypted_key.decode()
     check_combined_data = combined_data.split('.')
     if check_combined_data[-1] == 'external':
