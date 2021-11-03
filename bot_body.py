@@ -1,15 +1,15 @@
 import logging
 
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler, ConversationHandler
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
 
-from handlers import greet_user, enter_candidate, enter_employee, enter_hr, company, offices, contacts
-from anketa import anketa_start, anketa_name, anketa_city, anketa_phone, anketa_cv, anketa_cv_skip, anketa_dontknow
+from handlers import greet_user, company, offices, contacts, enter_hr
+from anketa import anketa
 from external_keyboard import career, news, company_external, offices_external, back
 from candidate_keyboard import dresscode, corplife, employment, adaptation
 from employee_keyboard import questions, learning, development, referral, inline_buttons
 from hr_keyboard import show_cv, show_user
 from hr_dialog import add_user
-
+from key_handler import enter_key_user
 import settings
 
 logging.basicConfig(filename='bot.log', level=logging.INFO)
@@ -21,31 +21,11 @@ def main():
     mybot = Updater(settings.API_KEY, use_context=True, request_kwargs=PROXY)
 
     dp = mybot.dispatcher
-
-    anketa = ConversationHandler(
-        entry_points=[
-            MessageHandler(Filters.regex('^(Регистрация)$'), anketa_start)
-        ],
-        states={
-            'name': [MessageHandler(Filters.text, anketa_name)],
-            'city': [MessageHandler(Filters.text, anketa_city)],
-            'phone': [MessageHandler(Filters.text, anketa_phone)],
-            'cv' : [
-                CommandHandler("skip", anketa_cv_skip),
-                MessageHandler(Filters.document, anketa_cv)
-            ]
-        },
-        fallbacks=[
-            MessageHandler(Filters.text | Filters.photo | Filters.video | Filters.document | Filters.location, anketa_dontknow)
-        ]
-    )
-    
     dp.add_handler(anketa)
+    dp.add_handler(enter_key_user)
     dp.add_handler(CommandHandler('start', greet_user))
+    dp.add_handler(CommandHandler('hr', enter_hr))
     dp.add_handler(CallbackQueryHandler(inline_buttons))
-    dp.add_handler(MessageHandler(Filters.regex('^(Войти по ключу кандидата)$'), enter_candidate))
-    dp.add_handler(MessageHandler(Filters.regex('^(Войти по ключу сотрудника)$'), enter_employee))
-    dp.add_handler(MessageHandler(Filters.regex('^(Войти по ключу HR)$'), enter_hr))
     dp.add_handler(MessageHandler(Filters.regex('^(О компании)$'), company))
     dp.add_handler(MessageHandler(Filters.regex('^(Про компанию)$'), company_external))
     dp.add_handler(MessageHandler(Filters.regex('^(Офисы)$'), offices))
