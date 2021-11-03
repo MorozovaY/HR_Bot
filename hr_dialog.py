@@ -6,10 +6,11 @@ import re
 from db import db_session, User, Role
 from hr_keyboard import hr_keyboard
 from sqlalchemy.exc import IntegrityError
+from key_handler import send_key
 
 
 def add_user_start(update, context):
-    context.user_data['new_user'] = dict()
+    context.user_data['anketa'] = dict()
     update.message.reply_text(
         'Вы перешли в раздел регистрации нового пользователя. '
         'Пожалуйста, введите имя нового пользователя в формате: ФАМИЛИЯ ИМЯ ОТЧЕСТВО.',
@@ -24,7 +25,7 @@ def add_user_name(update, context):
         update.message.reply_text('Пожалуйста, введите фамилию, имя и отчество.')
         return 'name'
     else:
-        context.user_data['new_user']['name'] = update.message.text
+        context.user_data['anketa']['name'] = update.message.text
         update.message.reply_text(
             'Введите телефонный номер.'
         )
@@ -35,11 +36,11 @@ def add_user_phone(update, context):
     user_phone = update.message.text
     phone_check = bool(re.findall(r"(^8|\+7)((\d{10})|(\s\(\d{3}\)\s\d{3}\s\d{2}\s\d{2}))", user_phone))
     if phone_check is True:
-        context.user_data['new_user']['phone'] = user_phone
+        context.user_data['anketa']['phone'] = user_phone
         update.message.reply_text(
-            'Введите роль пользователя. Доступные опции: "Кандидат" и "Сотрудник".')
+            'Введите роль пользователя. Доступные опции: "candidate" и "employee".')
         return 'role'
-
+        
 
 def add_user_role(update, context):
     user_role = update.message.text
@@ -49,8 +50,8 @@ def add_user_role(update, context):
             'Роль не найдена. Введите снова!'
         )
         return 'role'
-    context.user_data['new_user']['role'] = row.id
-    user = context.user_data.get('new_user')
+    context.user_data['anketa']['role'] = row.id
+    user = context.user_data.get('anketa')
 
     bot_user = User(name=user.get('name'), phone=user.get('phone'), role=user.get('role'))
 
@@ -59,6 +60,7 @@ def add_user_role(update, context):
         db_session.commit()
         update.message.reply_text('Создание пользователя завершено. ',
         generareply_markup=hr_keyboard())
+        send_key(update, context)
     
     except IntegrityError:
         update.message.reply_text('Ошибка. Такой номер телефона уже зарегестрирован.',
