@@ -2,7 +2,7 @@ import logging
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
 
-from handlers import greet_user, company, offices, contacts, enter_hr
+from handlers import greet_user, company, offices, contacts
 from anketa import anketa
 from external_keyboard import career, news, company_external, offices_external, back
 from candidate_keyboard import dresscode, corplife, employment, adaptation
@@ -24,7 +24,6 @@ def main():
     dp.add_handler(anketa)
     dp.add_handler(enter_key_user)
     dp.add_handler(CommandHandler('start', greet_user))
-    dp.add_handler(CommandHandler('hr', enter_hr))
     dp.add_handler(CallbackQueryHandler(inline_buttons))
     dp.add_handler(MessageHandler(Filters.regex('^(О компании)$'), company))
     dp.add_handler(MessageHandler(Filters.regex('^(Про компанию)$'), company_external))

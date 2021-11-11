@@ -50,23 +50,29 @@ def add_user_role(update, context):
             'Роль не найдена. Введите снова!'
         )
         return 'role'
-    context.user_data['anketa']['role'] = row.id
+    context.user_data['anketa']['role'] = user_role
+    context.user_data['anketa']['db_role'] = row.id
     user = context.user_data.get('anketa')
 
-    bot_user = User(name=user.get('name'), phone=user.get('phone'), role=user.get('role'))
+    bot_user = User(name=user.get('name'), phone=user.get('phone'), role=user.get('db_role'))
 
     try:
         db_session.add(bot_user)
         db_session.commit()
-        update.message.reply_text('Создание пользователя завершено. ',
-        generareply_markup=hr_keyboard())
-        send_key(update, context)
+        
     
     except IntegrityError:
         update.message.reply_text('Ошибка. Такой номер телефона уже зарегестрирован.',
             reply_markup=hr_keyboard()
         )
         db_session.rollback()
+
+    update.message.reply_text(
+        'Создание пользователя завершено. ',
+        send_key(update, context),
+        reply_markup=hr_keyboard()
+        )
+        
 
     return ConversationHandler.END
 
