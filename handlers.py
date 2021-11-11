@@ -1,6 +1,5 @@
 from telegram import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardButton, InlineKeyboardMarkup
-from hr_keyboard import hr_keyboard
-from other import greet_user_photo, hr_keyboard_photo
+from other import greet_user_photo
 
 def greet_user(update, context):
     print('Вызван /start')
@@ -20,14 +19,6 @@ def main_keyboard():
             ['О компании', 'Офисы'],
             ['Соцсети и контакты']
         ])
-
-
-def enter_hr(update, context):
-    context.bot.sendPhoto(chat_id=update.effective_chat.id,
-    photo=hr_keyboard_photo,
-    caption='Ниже представлено меню бота для HR.',
-    reply_markup=hr_keyboard()
-)
 
 
 def company(update, context):

@@ -2,8 +2,9 @@ from cryptography.fernet import Fernet
 from external_keyboard import external_keyboard
 from candidate_keyboard import candidate_keyboard
 from employee_keyboard import employee_keyboard
+from hr_keyboard import hr_keyboard
 from settings import CYPHER_KEY
-from other import external_photo, candidate_photo, employee_photo
+from other import external_photo, candidate_photo, employee_photo, hr_photo
 from telegram.ext.conversationhandler import ConversationHandler
 from telegram.ext import MessageHandler, Filters
 
@@ -54,6 +55,13 @@ def check_user_key(update, context):
         photo=employee_photo,
         caption='Welcome on board! Ниже представлено меню бота для Вас.',
         reply_markup=employee_keyboard())
+        return ConversationHandler.END
+
+    elif check_combined_data[-1] == 'HR':
+        context.bot.sendPhoto(chat_id=update.effective_chat.id,
+        photo=hr_photo,
+        caption='Ниже представлено меню бота для HR.',
+        reply_markup=hr_keyboard())
         return ConversationHandler.END
 
 def enter_user_dontknow(update, context):
